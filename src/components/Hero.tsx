@@ -34,7 +34,7 @@ function Disc() {
   );
 }
 
-const LINES = ["Orange makes", "ideas happen."];
+const LINES = ["Ideas,", "engineered."];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -106,19 +106,13 @@ export default function Hero() {
       <div data-hero-content className="container-x relative z-10 my-auto py-8">
         <h1
           id="hero-title"
-          aria-label="Orange makes ideas happen."
+          aria-label="Ideas, engineered."
           className="font-display text-[clamp(44px,14.6vw,280px)] font-bold leading-[0.86] tracking-[-0.06em] text-ink"
         >
           {LINES.map((line, i) => (
             <span key={line} aria-hidden="true" className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
               <span data-hero="line" className="block will-change-transform">
-                {i === 0 ? (
-                  <>
-                    <span className="text-orange-deep">Orange</span> makes
-                  </>
-                ) : (
-                  line
-                )}
+                {i === 1 ? <span className="text-orange-deep">{line}</span> : line}
               </span>
             </span>
           ))}
