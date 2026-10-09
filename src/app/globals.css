@@ -143,6 +143,21 @@ html.lenis body {
   }
 }
 
+/* Without JS the mobile overlay can't open, so show the chapter links inline instead. */
+html:not(.js) .nav-primary {
+  display: block;
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+html:not(.js) .menu-toggle {
+  display: none;
+}
+@keyframes nav-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Hero starting state — only when motion is allowed; GSAP animates it in. */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-hero="line"] {

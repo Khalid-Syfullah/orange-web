@@ -28,10 +28,10 @@ export const CHAPTERS: readonly Chapter[] = [
 
 /** Primary navigation — each entry points at an existing chapter. */
 export const NAV_LINKS = [
-  { id: "studio", number: "01", label: "The Model" },
-  { id: "capabilities", number: "02", label: "The Work" },
-  { id: "philosophy", number: "03", label: "Philosophy" },
-  { id: "contact", number: "04", label: "Contact" },
+  { id: "studio", number: "01", label: "The Idea" },
+  { id: "capabilities", number: "02", label: "What We Do" },
+  { id: "philosophy", number: "03", label: "How We Think" },
+  { id: "contact", number: "04", label: "Let\u2019s Talk" },
 ] as const;
 
 export const STATS = [
