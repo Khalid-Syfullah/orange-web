@@ -79,7 +79,7 @@ export default function TextReveal({
                 <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-top">
                   <motion.span
                     variants={word}
-                    className={`inline-block will-change-transform ${isHighlight ? highlightClassName : ""}`}
+                    className={`inline-block ${isHighlight ? highlightClassName : ""}`}
                   >
                     {w}
                   </motion.span>

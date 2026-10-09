@@ -2,15 +2,16 @@
 
 import type { MouseEvent, PointerEvent, ReactNode } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, LoaderCircle } from "lucide-react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { navigateTo } from "@/lib/scroll";
 
-type Variant = "solid" | "inverse" | "outline-light";
+type Variant = "solid" | "inverse" | "outline-light" | "orange";
 
 const VARIANTS: Record<Variant, { base: string; fill: string }> = {
   solid: { base: "bg-ink text-paper group-hover:text-ink group-focus-visible:text-ink", fill: "bg-orange" },
   inverse: { base: "bg-ink text-paper group-hover:text-ink group-focus-visible:text-ink", fill: "bg-paper" },
+  orange: { base: "bg-orange text-ink", fill: "bg-paper" },
   "outline-light": {
     base: "border border-paper/60 text-paper group-hover:text-ink group-focus-visible:text-ink",
     fill: "bg-orange",
@@ -25,6 +26,10 @@ interface MagneticButtonProps {
   /** How far the button follows the pointer (0–1). */
   strength?: number;
   className?: string;
+  /** Disables a <button>; ignored for links. */
+  disabled?: boolean;
+  /** Replaces the arrow with a spinner. */
+  loading?: boolean;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
 }
 
@@ -35,6 +40,8 @@ export default function MagneticButton({
   variant = "solid",
   strength = 0.35,
   className = "",
+  disabled = false,
+  loading = false,
   onClick,
 }: MagneticButtonProps) {
   const canHover = useMediaQuery("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
@@ -62,11 +69,15 @@ export default function MagneticButton({
         aria-hidden="true"
         className={`absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-expo group-hover:scale-y-100 group-focus-visible:scale-y-100 ${v.fill}`}
       />
-      <span className="relative z-10">{children}</span>
-      <ArrowUpRight
-        aria-hidden="true"
-        className="relative z-10 size-5 transition-transform duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-      />
+      <span className="relative z-10 whitespace-nowrap">{children}</span>
+      {loading ? (
+        <LoaderCircle aria-hidden="true" className="relative z-10 size-5 animate-spin" />
+      ) : (
+        <ArrowUpRight
+          aria-hidden="true"
+          className="relative z-10 size-5 transition-transform duration-500 ease-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
+      )}
     </>
   );
 
@@ -84,7 +95,7 @@ export default function MagneticButton({
           {inner}
         </a>
       ) : (
-        <button type={type} className={classes} onClick={onClick}>
+        <button type={type} className={`${classes} disabled:cursor-not-allowed disabled:opacity-70`} disabled={disabled} onClick={onClick}>
           {inner}
         </button>
       )}

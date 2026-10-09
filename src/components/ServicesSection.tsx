@@ -48,8 +48,7 @@ export default function ServicesSection() {
           id="capabilities-title"
           text={"Everything digital.\nNothing ordinary."}
           highlight={["ordinary"]}
-          lineClasses={["", "md:ml-[12vw]"]}
-          className="mb-16 mt-10 font-display text-[clamp(32px,9vw,168px)] font-bold leading-[0.9] tracking-[-0.055em] text-ink md:mb-28 md:mt-16"
+          className="mb-16 mt-10 text-right font-display text-[clamp(32px,9vw,168px)] font-bold leading-[0.9] tracking-[-0.055em] text-ink md:mb-28 md:mt-16"
         />
       </div>
 

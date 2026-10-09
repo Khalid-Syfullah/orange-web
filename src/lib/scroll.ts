@@ -30,7 +30,16 @@ export function navigateTo(
   event.preventDefault();
 
   if (lenis) {
-    lenis.scrollTo(hash === "#top" ? 0 : target, { duration: 1.5, immediate: prefersReducedMotion() });
+    const l = lenis;
+    const destination = () => (hash === "#top" ? 0 : target.getBoundingClientRect().top + l.scroll);
+    l.scrollTo(destination(), {
+      duration: 1.5,
+      immediate: prefersReducedMotion(),
+      // Layout can shift mid-flight (an accordion closing, fonts arriving): settle on the true position.
+      onComplete: () => {
+        if (Math.abs(destination() - l.scroll) > 2) l.scrollTo(destination(), { duration: 0.5 });
+      },
+    });
   } else if (hash === "#top") {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
   } else {

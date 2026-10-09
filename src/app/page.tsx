@@ -7,7 +7,6 @@ import SphereSection from "@/components/SphereSection";
 
 // Below-the-fold chapters are split into their own chunks.
 const PhilosophySection = dynamic(() => import("@/components/PhilosophySection"));
-const ProcessSection = dynamic(() => import("@/components/ProcessSection"));
 const ContactSection = dynamic(() => import("@/components/ContactSection"));
 const Footer = dynamic(() => import("@/components/Footer"));
 
@@ -15,13 +14,12 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main id="main">
+      <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <AboutSection />
         <ServicesSection />
         <SphereSection />
         <PhilosophySection />
-        <ProcessSection />
         <ContactSection />
       </main>
       <Footer />

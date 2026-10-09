@@ -73,11 +73,11 @@ export default function AboutSection() {
       className="relative overflow-hidden pb-20 pt-28 md:pb-32 md:pt-44"
     >
       {/* Oversized outlined numeral — slow parallax counterweight */}
-      <div aria-hidden="true" className="pointer-events-none absolute -right-[2vw] top-[26%] md:top-[22%] select-none">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-[2vw] top-[22%] hidden select-none md:block">
         <ParallaxSection speed={0.22}>
           <span
             className="block font-display text-[clamp(220px,46vw,760px)] font-bold leading-[0.8] tracking-[-0.07em] text-transparent"
-            style={{ WebkitTextStroke: "1px var(--color-orange)" }}
+            style={{ WebkitTextStroke: "1px rgb(255 107 0 / 0.5)" }}
           >
             01
           </span>
@@ -151,11 +151,11 @@ export default function AboutSection() {
           <div data-closing-rule className="h-0.5 origin-left bg-orange-deep" />
           <AnchorLink
             href="#capabilities"
-            className="group flex items-end justify-between gap-6 py-6 md:py-8"
+            className="group flex flex-col items-start gap-3 py-6 md:flex-row md:items-end md:justify-between md:gap-6 md:py-8"
             aria-label="Next chapter: 02, What We Do"
           >
             <span className="label text-muted">Next chapter</span>
-            <span className="flex items-center gap-3 font-display text-[clamp(24px,3.6vw,56px)] font-semibold tracking-[-0.03em] text-ink">
+            <span className="flex items-center gap-3 whitespace-nowrap font-display text-[clamp(26px,3.6vw,56px)] font-semibold tracking-[-0.03em] text-ink">
               <span className="tabular-nums text-orange-ink">02</span>
               <span className="relative">
                 What We Do

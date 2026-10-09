@@ -17,6 +17,7 @@ const noopSubscribe = () => () => {};
 export default function SphereSection() {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const [near, setNear] = useState(false);
   const [ready, setReady] = useState(false);
   const [lowPerf, setLowPerf] = useState(false);
 
@@ -35,19 +36,28 @@ export default function SphereSection() {
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { rootMargin: "120px" });
+    // three.js is only downloaded once the section is about a screen away.
+    const preload = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && (setNear(true), preload.disconnect()),
+      { rootMargin: "100% 0px" },
+    );
     io.observe(el);
-    return () => io.disconnect();
+    preload.observe(el);
+    return () => {
+      io.disconnect();
+      preload.disconnect();
+    };
   }, []);
 
   return (
     <section ref={ref} id="built" data-tone="light" aria-labelledby="built-title" className="relative h-[270svh] md:h-[300svh]">
       <motion.div style={{ backgroundColor: background, color }} className="sticky top-0 h-svh overflow-hidden">
         {/* Static sphere: first paint, low-power and reduced-motion fallback */}
-        <div className={`absolute inset-0 transition-opacity duration-1000 ${live && ready ? "opacity-0" : "opacity-100"}`}>
+        <div className={`absolute inset-0 transition-opacity duration-1000 ${live && near && ready ? "opacity-0" : "opacity-100"}`}>
           <StaticSphere enter={enter} pinned={pinned} />
         </div>
 
-        {live && (
+        {live && near && (
           <div className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}>
             <SphereCanvas
               enter={enter}
@@ -65,7 +75,6 @@ export default function SphereSection() {
             id="built-title"
             text={"Built to\nstand out."}
             highlight={["stand", "out"]}
-            lineClasses={["", "md:ml-[6vw]"]}
             className="font-display text-[clamp(44px,13vw,200px)] font-bold leading-[0.88] tracking-[-0.055em] md:text-[clamp(64px,9.4vw,200px)]"
           />
 
