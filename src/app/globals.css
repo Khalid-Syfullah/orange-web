@@ -75,10 +75,6 @@ html.lenis body {
 
 @utility container-x {
   padding-inline: clamp(16px, 4vw, 64px);
-  /* Leave room for the fixed chapter index */
-  @media (min-width: 1024px) {
-    padding-inline-end: 6.5rem;
-  }
 }
 
 /* Editorial type scale */
@@ -144,6 +140,33 @@ html.lenis body {
   }
   50% {
     transform: translate3d(0, 30%, 0);
+  }
+}
+
+/* Hero starting state — only when motion is allowed; GSAP animates it in. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-hero="line"] {
+    transform: translateY(110%);
+  }
+  .js [data-hero="fade"] {
+    opacity: 0;
+  }
+}
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50.01% {
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
   }
 }
 

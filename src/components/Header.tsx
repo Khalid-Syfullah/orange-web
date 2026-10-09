@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { EASE } from "@/lib/animations";
-import { CHAPTERS, OFFICES, SITE } from "@/lib/constants";
+import { NAV_LINKS, OFFICES, SITE } from "@/lib/constants";
 import { useActiveChapter } from "@/hooks/useActiveChapter";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { lockScroll, navigateTo } from "@/lib/scroll";
@@ -52,11 +52,12 @@ export default function Header() {
   return (
     <>
       <motion.header
-        animate={{ y: hidden && !open ? "-100%" : "0%" }}
-        transition={{ duration: 0.6, ease: EASE }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: hidden && !open ? "-100%" : "0%" }}
+        transition={{ duration: 0.6, ease: EASE, opacity: { duration: 1.2, delay: 0.3 } }}
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${textColor} ${surface}`}
       >
-        <div className="container-x grid grid-cols-[1fr_auto] items-center gap-4 py-4 md:grid-cols-3 md:py-5">
+        <div className="container-x grid grid-cols-[1fr_auto] items-center gap-4 py-4 md:grid-cols-[auto_1fr] md:py-5">
           <a
             href="#top"
             onClick={(e) => {
@@ -67,14 +68,33 @@ export default function Header() {
             aria-label={`${SITE.name} — back to top`}
           >
             <span aria-hidden="true" className="size-3.5 rounded-full bg-orange" />
-            {SITE.name}
+            <span className="uppercase tracking-[0.08em]">{SITE.name}</span>
           </a>
 
-          <p className="label hidden justify-self-center md:block" aria-live="off">
-            <span className="tabular-nums">{chapter.number}</span>
-            <span className="mx-2 opacity-50">/</span>
-            {chapter.label}
-          </p>
+          <nav aria-label="Primary" className="hidden justify-self-end md:block">
+            <ul className="flex items-center gap-8 lg:gap-12">
+              {NAV_LINKS.map((l) => (
+                <li key={l.id}>
+                  <a
+                    href={`#${l.id}`}
+                    onClick={(e) => navigateTo(e, `#${l.id}`)}
+                    aria-current={chapter.id === l.id ? "true" : undefined}
+                    className="label group relative inline-flex min-h-11 items-center"
+                  >
+                    <span className="tabular-nums opacity-60">{l.number}</span>
+                    <span className="mx-1.5 opacity-40">/</span>
+                    {l.label}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-0 bottom-2 h-px origin-left bg-current transition-transform duration-500 ease-expo ${
+                        chapter.id === l.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                      }`}
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           <button
             ref={toggleRef}
@@ -82,7 +102,7 @@ export default function Header() {
             aria-expanded={open}
             aria-controls="site-menu"
             onClick={() => setOpen((o) => !o)}
-            className="label group -mr-2 flex min-h-11 items-center gap-3 justify-self-end px-2"
+            className="label group -mr-2 flex min-h-11 items-center gap-3 justify-self-end px-2 md:hidden"
           >
             <span className="relative block h-[1.2em] w-[4.2em] overflow-hidden text-right">
               <span
@@ -132,9 +152,9 @@ export default function Header() {
             transition={{ duration: 0.8, ease: EASE }}
             className="fixed inset-0 z-40 flex flex-col bg-ink text-paper"
           >
-            <nav aria-label="Chapters" className="container-x flex flex-1 flex-col justify-center pt-24">
+            <nav aria-label="Menu" className="container-x flex flex-1 flex-col justify-center pt-24">
               <ol>
-                {CHAPTERS.map((c, i) => (
+                {NAV_LINKS.map((c, i) => (
                   <li key={c.id} className="overflow-hidden border-t border-paper/15 last:border-b">
                     <motion.div
                       initial={{ y: "100%" }}

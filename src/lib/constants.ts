@@ -26,6 +26,14 @@ export const CHAPTERS: readonly Chapter[] = [
   { id: "contact", number: "06", label: "Contact", tone: "orange" },
 ];
 
+/** Primary navigation — each entry points at an existing chapter. */
+export const NAV_LINKS = [
+  { id: "studio", number: "01", label: "The Model" },
+  { id: "capabilities", number: "02", label: "The Work" },
+  { id: "philosophy", number: "03", label: "Philosophy" },
+  { id: "contact", number: "04", label: "Contact" },
+] as const;
+
 export const STATS = [
   { value: 11, suffix: "", label: "Years of practice" },
   { value: 160, suffix: "+", label: "Products shipped" },

@@ -1,15 +1,16 @@
-import { ArrowDown } from "lucide-react";
-import AnchorLink from "@/components/AnchorLink";
-import ParallaxSection from "@/components/animations/ParallaxSection";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-import TextReveal from "@/components/animations/TextReveal";
-import MagneticButton from "@/components/animations/MagneticButton";
-import { OFFICES, SITE } from "@/lib/constants";
+"use client";
 
-/** Concentric measurement rings around a flat orange disc. */
+import { useLayoutEffect, useRef } from "react";
+import MagneticButton from "@/components/animations/MagneticButton";
+import ParallaxSection from "@/components/animations/ParallaxSection";
+import AnchorLink from "@/components/AnchorLink";
+import { gsap, NO_MOTION_QUERY, registerGsap } from "@/lib/animations";
+import { SITE } from "@/lib/constants";
+
+/** Flat orange disc with measurement rings. */
 function Disc() {
   return (
-    <div className="relative aspect-square w-[min(70vw,30rem)] md:w-[min(42vw,52rem)]">
+    <div className="relative aspect-square w-[min(88vw,26rem)] md:w-[min(46vw,50rem)]">
       <div className="absolute inset-0 rounded-full bg-orange" />
       <svg viewBox="0 0 200 200" aria-hidden="true" className="absolute -inset-[12%] size-[124%] text-ink">
         <circle cx="100" cy="100" r="98" fill="none" stroke="currentColor" strokeWidth="0.25" />
@@ -33,56 +34,105 @@ function Disc() {
   );
 }
 
+const LINES = ["Orange makes", "ideas happen."];
+
 export default function Hero() {
+  const root = useRef<HTMLElement>(null);
+  const disc = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    registerGsap();
+    const el = root.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+
+    // Load sequence: headline lines rise out of their masks, then the supporting layers fade up.
+    mm.add(NO_MOTION_QUERY, () => {
+      const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.15 });
+      tl.fromTo("[data-hero=line]", { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.5, stagger: 0.14 })
+        .fromTo("[data-hero=fade]", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, "-=0.9");
+    });
+
+    // Disc eases toward the pointer (fine pointers only).
+    mm.add(`${NO_MOTION_QUERY} and (hover: hover) and (pointer: fine)`, () => {
+      const target = disc.current;
+      if (!target) return;
+      const x = gsap.quickTo(target, "x", { duration: 1.4, ease: "power3.out" });
+      const y = gsap.quickTo(target, "y", { duration: 1.4, ease: "power3.out" });
+      const move = (e: PointerEvent) => {
+        x((e.clientX / window.innerWidth - 0.5) * -70);
+        y((e.clientY / window.innerHeight - 0.5) * -70);
+      };
+      el.addEventListener("pointermove", move);
+      return () => el.removeEventListener("pointermove", move);
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
     <section
+      ref={root}
       id="top"
       data-tone="light"
-      className="relative flex min-h-svh flex-col overflow-hidden pb-8 pt-28 md:pt-32"
+      aria-labelledby="hero-title"
+      className="relative flex min-h-svh flex-col overflow-hidden pb-6 pt-24 md:pb-8 md:pt-28"
     >
-      <div className="pointer-events-none absolute -right-[14vw] top-[8svh] md:-right-[6vw] md:top-[8svh]">
-        <ParallaxSection speed={0.12}>
-          <ScrollReveal y={0}>
+      <div className="pointer-events-none absolute -right-[34vw] top-[30svh] md:-right-[10vw] md:top-[26svh]">
+        <ParallaxSection speed={0.1}>
+          <div ref={disc} className="will-change-transform">
             <Disc />
-          </ScrollReveal>
+          </div>
         </ParallaxSection>
       </div>
 
-      <div className="container-x relative z-10 mt-auto">
-        <p className="label mb-6 text-muted md:mb-10">
-          <span className="text-orange-ink">●</span>&nbsp; Independent digital studio — Est. 2014
-        </p>
-
-        <TextReveal
-          as="h1"
+      <div className="container-x relative z-10 my-auto py-8">
+        <h1
           id="hero-title"
-          text={"We build\nwhat comes\nnext."}
-          trigger="mount"
-          delay={0.1}
-          highlight={["next"]}
-          lineClasses={["", "md:ml-[9vw]", ""]}
-          className="display-hero text-ink"
-        />
+          aria-label="Orange makes ideas happen."
+          className="font-display text-[clamp(44px,14.6vw,280px)] font-bold leading-[0.86] tracking-[-0.06em] text-ink"
+        >
+          {LINES.map((line, i) => (
+            <span key={line} aria-hidden="true" className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+              <span data-hero="line" className="block will-change-transform">
+                {i === 0 ? (
+                  <>
+                    <span className="text-orange-deep">Orange</span> makes
+                  </>
+                ) : (
+                  line
+                )}
+              </span>
+            </span>
+          ))}
+        </h1>
+      </div>
 
-        <div className="mt-10 grid grid-cols-12 items-end gap-x-4 gap-y-8 border-t border-rule pt-6 md:mt-16">
-          <p className="lede col-span-12 max-w-[34ch] md:col-span-5 lg:col-span-4">
-            {SITE.secondary} A studio of senior designers and engineers shaping the products and platforms
-            that define their categories.
+      <div className="container-x relative z-10">
+        <div className="grid grid-cols-12 items-end gap-x-4 gap-y-8 border-t border-ink/20 pt-6 md:pt-8">
+          <p data-hero="fade" className="display-md col-span-12 md:col-span-4">
+            {SITE.tagline}
           </p>
-          <div className="col-span-12 md:col-span-4 md:col-start-7 lg:col-start-6">
-            <MagneticButton href="#contact">Start a project</MagneticButton>
-          </div>
-          <div className="label col-span-12 flex items-center justify-between gap-6 text-muted md:col-span-3 md:justify-end">
-            <span>{OFFICES.join(" / ")}</span>
-            <AnchorLink
-              href="#studio"
-              aria-label="Scroll to studio"
-              className="grid size-11 place-items-center overflow-hidden border border-ink/30 text-ink hover:bg-ink hover:text-paper"
-            >
-              <ArrowDown aria-hidden="true" className="size-4" style={{ animation: "cue 2.4s ease-in-out infinite" }} />
-            </AnchorLink>
+          <p data-hero="fade" className="lede col-span-12 max-w-[44ch] text-ink md:col-span-4 md:col-start-6 lg:col-start-5">
+            We turn ambitious ideas into exceptional digital products through thoughtful design,
+            intelligent engineering, and relentless innovation.
+          </p>
+          <div data-hero="fade" className="col-span-12 md:col-span-3 md:col-start-10 md:justify-self-end">
+            <MagneticButton href="#studio">Explore Orange</MagneticButton>
           </div>
         </div>
+
+        <AnchorLink
+          href="#studio"
+          data-hero="fade"
+          aria-label="Scroll to next section"
+          className="label mt-8 inline-flex min-h-11 items-center gap-4 text-ink md:mt-10"
+        >
+          <span aria-hidden="true" className="relative block h-10 w-px overflow-hidden bg-ink/20">
+            <span className="absolute inset-0 bg-ink" style={{ animation: "scroll-line 2.4s var(--ease-expo) infinite" }} />
+          </span>
+          Scroll
+        </AnchorLink>
       </div>
     </section>
   );
