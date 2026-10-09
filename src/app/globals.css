@@ -162,6 +162,21 @@ html:not(.js) .menu-toggle {
   }
 }
 
+/* Loading curtain: only exists with JS, and only until the sequence completes */
+.loader {
+  display: none;
+}
+.js .loader {
+  display: flex;
+}
+html[data-loader="done"] .loader {
+  display: none;
+}
+/* Header waits for the page to be ready, then fades in */
+.js:not([data-ready]) [data-site-header] {
+  opacity: 0;
+}
+
 /* Hero starting state — only when motion is allowed; GSAP animates it in. */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-hero="line"] {

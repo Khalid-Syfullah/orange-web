@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import Cursor from "@/components/Cursor";
+import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/SmoothScroll";
 import { SITE } from "@/lib/constants";
 import "./globals.css";
@@ -14,6 +16,13 @@ const sans = Inter({
   variable: "--font-inter",
   display: "swap",
 });
+
+/*
+ * Runs before first paint. Marks JS availability and decides whether the loading sequence plays:
+ * it is skipped for reduced motion and for repeat visits in the same session. A timeout makes sure
+ * the page can never stay hidden if something goes wrong.
+ */
+const HEAD_SCRIPT = `(function(d){var h=d.documentElement;h.classList.add('js');try{if(sessionStorage.getItem('orange-loaded')||matchMedia('(prefers-reduced-motion: reduce)').matches){h.dataset.ready='1';h.dataset.loader='done'}}catch(e){}setTimeout(function(){h.dataset.ready='1';h.dataset.loader='done'},9000)})(document)`;
 
 export const metadata: Metadata = {
   title: { default: `${SITE.name} — ${SITE.tagline}`, template: `%s · ${SITE.name}` },
@@ -35,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${sans.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: HEAD_SCRIPT }} />
       </head>
       <body>
         <a
@@ -45,6 +54,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <SmoothScroll />
+        <Loader />
+        <Cursor />
         {children}
       </body>
     </html>

@@ -301,6 +301,7 @@ export default function ContactSection() {
                 </Field>
                 <Field id={id("message")} label="Project description" error={errors.message} className="sm:col-span-2">
                   <textarea
+                    data-lenis-prevent
                     id={id("message")}
                     name="message"
                     value={values.message}

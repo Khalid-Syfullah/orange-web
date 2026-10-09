@@ -9,7 +9,15 @@ import { setLenis } from "@/lib/scroll";
 export default function SmoothScroll() {
   useEffect(() => {
     registerGsap();
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Late-arriving fonts and lazy chunks shift layout; re-measure so triggers stay accurate.
+    const refresh = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(refresh);
+    window.addEventListener("load", refresh);
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return () => window.removeEventListener("load", refresh);
+    }
 
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     setLenis(lenis);
@@ -20,6 +28,7 @@ export default function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      window.removeEventListener("load", refresh);
       gsap.ticker.remove(tick);
       lenis.destroy();
       setLenis(null);

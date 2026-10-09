@@ -47,10 +47,27 @@ export default function Hero() {
     const mm = gsap.matchMedia();
 
     // Load sequence: headline lines rise out of their masks, then the supporting layers fade up.
+    // It waits for the loading curtain (`orange:ready`) on first visits.
     mm.add(NO_MOTION_QUERY, () => {
-      const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.15 });
+      const tl = gsap.timeline({ defaults: { ease: "expo.out" }, paused: true, delay: 0.1 });
       tl.fromTo("[data-hero=line]", { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.5, stagger: 0.14 })
         .fromTo("[data-hero=fade]", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, "-=0.9");
+
+      const play = () => tl.play();
+      if (document.documentElement.dataset.ready) play();
+      else window.addEventListener("orange:ready", play, { once: true });
+
+      // Hand-off to the next section: the hero recedes slightly as the story begins.
+      const content = el.querySelector("[data-hero-content]");
+      if (content) {
+        gsap.to(content, {
+          yPercent: -6,
+          opacity: 0.25,
+          ease: "none",
+          scrollTrigger: { trigger: el, start: "top top", end: "bottom 20%", scrub: true },
+        });
+      }
+      return () => window.removeEventListener("orange:ready", play);
     });
 
     // Disc eases toward the pointer (fine pointers only).
@@ -86,7 +103,7 @@ export default function Hero() {
         </ParallaxSection>
       </div>
 
-      <div className="container-x relative z-10 my-auto py-8">
+      <div data-hero-content className="container-x relative z-10 my-auto py-8">
         <h1
           id="hero-title"
           aria-label="Orange makes ideas happen."

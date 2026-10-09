@@ -69,8 +69,8 @@ export default function Header() {
         onFocusCapture={() => setHidden(false)}
         animate={{ y: hidden && !open ? "-100%" : "0%" }}
         transition={{ duration: 0.6, ease: EASE }}
-        style={{ animation: "nav-fade 1.2s 0.3s ease-out backwards" }}
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${onDark ? "text-paper" : "text-ink"} ${surface}`}
+        data-site-header
+        className={`fixed inset-x-0 top-0 z-50 transition-[color,background-color,opacity] duration-700 ${onDark ? "text-paper" : "text-ink"} ${surface}`}
       >
         <div className="container-x grid grid-cols-[1fr_auto] items-center gap-x-4 py-4 md:grid-cols-[auto_1fr] md:py-5">
           <a
@@ -172,6 +172,7 @@ export default function Header() {
             aria-modal="true"
             aria-label="Chapters"
             data-tone="dark"
+            data-lenis-prevent
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
