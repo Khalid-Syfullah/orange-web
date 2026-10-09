@@ -37,38 +37,38 @@ export const NAV_LINKS = [
 export const SERVICES = [
   {
     number: "01",
-    title: "Product Strategy",
+    title: "Software Engineering",
     description:
-      "Positioning, roadmaps and technical direction — decided before a single pixel is drawn.",
-    tags: ["Discovery", "Roadmapping", "Prototyping"],
+      "We architect and develop scalable digital products built for performance, reliability, and growth.",
+    tags: ["Architecture", "Platforms", "Cloud & APIs"],
   },
   {
     number: "02",
-    title: "Interface Design",
+    title: "Web Experiences",
     description:
-      "Design systems, motion and interaction with an editorial point of view and an engineer's rigour.",
-    tags: ["UX", "Motion", "Design systems"],
+      "We create visually compelling, fast, and accessible web experiences that leave a lasting impression.",
+    tags: ["Next.js", "Motion & WebGL", "Accessibility"],
   },
   {
     number: "03",
-    title: "Web Engineering",
+    title: "Artificial Intelligence",
     description:
-      "Fast, accessible, edge-native platforms built on modern foundations and made to scale quietly.",
-    tags: ["Next.js", "WebGL", "Headless"],
+      "We transform complex challenges into intelligent solutions using modern AI and machine learning.",
+    tags: ["LLM products", "Search & retrieval", "Automation"],
   },
   {
     number: "04",
-    title: "Brand Systems",
+    title: "Product Design",
     description:
-      "Identity, language and tooling that hold together across every screen, surface and decade.",
-    tags: ["Identity", "Voice", "Guidelines"],
+      "We combine research, strategy, and visual design to create intuitive digital experiences.",
+    tags: ["Research", "Interaction", "Design systems"],
   },
   {
     number: "05",
-    title: "Applied Intelligence",
+    title: "Digital Strategy",
     description:
-      "Practical machine learning woven into products — assistive, measurable and never decorative.",
-    tags: ["LLM products", "Search", "Automation"],
+      "We help ambitious businesses translate technology into meaningful competitive advantages.",
+    tags: ["Roadmaps", "Technology advisory", "Growth"],
   },
 ] as const;
 
