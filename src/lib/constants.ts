@@ -21,6 +21,8 @@ export const CHAPTERS: readonly Chapter[] = [
   { id: "top", number: "01", label: "Index", tone: "light" },
   { id: "studio", number: "02", label: "Studio", tone: "light" },
   { id: "capabilities", number: "03", label: "Capabilities", tone: "light" },
+  { id: "built", number: "—", label: "Built to stand out", tone: "light" },
+  { id: "built-dark", number: "—", label: "Built to stand out", tone: "dark" },
   { id: "philosophy", number: "04", label: "Philosophy", tone: "dark" },
   { id: "process", number: "05", label: "Process", tone: "light" },
   { id: "contact", number: "06", label: "Contact", tone: "orange" },
