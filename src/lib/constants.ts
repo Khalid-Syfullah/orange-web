@@ -25,7 +25,7 @@ export const CHAPTERS: readonly Chapter[] = [
   { id: "built-dark", number: "—", label: "Built to stand out", tone: "dark" },
   { id: "philosophy", number: "04", label: "Philosophy", tone: "dark" },
   { id: "process", number: "05", label: "Process", tone: "light" },
-  { id: "contact", number: "06", label: "Contact", tone: "orange" },
+  { id: "contact", number: "06", label: "Contact", tone: "dark" },
 ];
 
 /** Primary navigation — each entry points at an existing chapter. */
@@ -95,6 +95,13 @@ export const PROCESS = [
     title: "Evolve",
     body: "Measure, improve, and continuously innovate.",
   },
+] as const;
+
+export const SOCIALS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/orange-studio" },
+  { label: "Instagram", href: "https://www.instagram.com/orange.studio" },
+  { label: "X", href: "https://x.com/orangestudio" },
+  { label: "GitHub", href: "https://github.com/orange-studio" },
 ] as const;
 
 export const OFFICES = ["Oslo", "Berlin", "Singapore"] as const;
