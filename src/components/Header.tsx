@@ -79,7 +79,7 @@ export default function Header() {
               setOpen(false);
               navigateTo(e, "#top");
             }}
-            className="flex items-center gap-2.5 font-display text-xl font-bold tracking-tight"
+            className="flex min-h-11 items-center gap-2.5 font-display text-xl font-bold tracking-tight"
             aria-label={`${SITE.name} — back to top`}
           >
             <span aria-hidden="true" className="size-3.5 rounded-full bg-orange" />

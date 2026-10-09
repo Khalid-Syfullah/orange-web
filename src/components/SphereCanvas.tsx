@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer, PerformanceMonitor } from "@react-three/drei";
+import { Environment, Lightformer, PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
 import type { MotionValue } from "motion/react";
 import { clamp01, easeInOutCubic, easeOutCubic, lerp, Spring } from "@/lib/spring";
@@ -44,6 +44,20 @@ function makePeelTexture() {
   return tex;
 }
 
+/** Soft radial falloff used as a fake contact shadow: cheap, stable, and travels with the sphere. */
+function makeShadowTexture() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  const ctx = c.getContext("2d")!;
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, "rgba(61, 23, 0, 0.55)");
+  g.addColorStop(0.45, "rgba(61, 23, 0, 0.22)");
+  g.addColorStop(1, "rgba(61, 23, 0, 0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+
 function Orb({ enter, pinned }: Pick<SphereCanvasProps, "enter" | "pinned">) {
   const group = useRef<THREE.Group>(null);
   const sphere = useRef<THREE.Mesh>(null);
@@ -51,6 +65,7 @@ function Orb({ enter, pinned }: Pick<SphereCanvasProps, "enter" | "pinned">) {
   const idle = useRef(0);
   const { viewport } = useThree();
   const peel = useMemo(() => makePeelTexture(), []);
+  const shadow = useMemo(() => makeShadowTexture(), []);
 
   const springs = useRef({
     x: new Spring(0, 55, 12),
@@ -70,8 +85,9 @@ function Orb({ enter, pinned }: Pick<SphereCanvasProps, "enter" | "pinned">) {
     return () => {
       window.removeEventListener("pointermove", onMove);
       peel.dispose();
+      shadow.dispose();
     };
-  }, [peel]);
+  }, [peel, shadow]);
 
   useFrame((_, dt) => {
     const g = group.current;
@@ -134,8 +150,10 @@ function Orb({ enter, pinned }: Pick<SphereCanvasProps, "enter" | "pinned">) {
           bumpScale={0.5}
         />
       </mesh>
-      {/* Baked once: the shadow is attached to the group, so it travels and scales with the sphere. */}
-      <ContactShadows position={[0, -1.3, 0]} opacity={0.26} scale={5} blur={2.8} far={2.2} resolution={512} frames={1} color="#3d1700" />
+      <mesh position={[0, -1.32, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[3.4, 3.4, 1]}>
+        <planeGeometry />
+        <meshBasicMaterial map={shadow} transparent depthWrite={false} toneMapped={false} opacity={0.75} />
+      </mesh>
     </group>
   );
 }

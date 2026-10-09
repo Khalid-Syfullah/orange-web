@@ -10,7 +10,7 @@ import { SITE } from "@/lib/constants";
 /** Flat orange disc with measurement rings. */
 function Disc() {
   return (
-    <div className="relative aspect-square w-[min(88vw,26rem)] md:w-[min(46vw,50rem)]">
+    <div className="relative aspect-square w-[min(56vw,26rem)] md:w-[min(46vw,50rem)]">
       <div className="absolute inset-0 rounded-full bg-orange" />
       <svg viewBox="0 0 200 200" aria-hidden="true" className="absolute -inset-[12%] size-[124%] text-ink">
         <circle cx="100" cy="100" r="98" fill="none" stroke="currentColor" strokeWidth="0.25" />
@@ -95,7 +95,7 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative flex min-h-svh flex-col overflow-hidden pb-6 pt-24 md:pb-8 md:pt-28"
     >
-      <div className="pointer-events-none absolute -right-[34vw] top-[30svh] md:-right-[10vw] md:top-[26svh]">
+      <div className="pointer-events-none absolute -right-[30vw] top-[11svh] md:-right-[14vw] md:top-[22svh]">
         <ParallaxSection speed={0.1}>
           <div ref={disc} className="will-change-transform">
             <Disc />
@@ -127,14 +127,14 @@ export default function Hero() {
 
       <div className="container-x relative z-10">
         <div className="grid grid-cols-12 items-end gap-x-4 gap-y-8 border-t border-ink/20 pt-6 md:pt-8">
-          <p data-hero="fade" className="display-md col-span-12 md:col-span-4">
+          <p data-hero="fade" className="col-span-12 font-display text-[clamp(26px,3.4vw,52px)] font-semibold leading-[1.02] tracking-[-0.03em] md:col-span-5 lg:col-span-4">
             {SITE.tagline}
           </p>
-          <p data-hero="fade" className="lede col-span-12 max-w-[44ch] text-ink md:col-span-4 md:col-start-6 lg:col-start-5">
+          <p data-hero="fade" className="lede col-span-12 max-w-[36ch] text-ink md:col-span-7 md:col-start-6 lg:col-span-4 lg:col-start-5">
             We turn ambitious ideas into exceptional digital products through thoughtful design,
             intelligent engineering, and relentless innovation.
           </p>
-          <div data-hero="fade" className="col-span-12 md:col-span-3 md:col-start-10 md:justify-self-end">
+          <div data-hero="fade" className="col-span-12 md:col-span-7 md:col-start-6 lg:col-span-3 lg:col-start-10 lg:justify-self-end">
             <MagneticButton href="#studio">Explore Orange</MagneticButton>
           </div>
         </div>

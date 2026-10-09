@@ -170,9 +170,9 @@ export default function ContactSection() {
             text={"Let’s make it\nhappen."}
             highlight={["happen"]}
             highlightClassName="text-orange"
-            className="col-span-12 font-display text-[clamp(32px,5.4vw,96px)] font-semibold leading-[0.96] tracking-[-0.045em] md:col-span-7"
+            className="col-span-12 font-display text-[clamp(32px,5.4vw,96px)] font-semibold leading-[0.96] tracking-[-0.045em] md:col-span-6 lg:col-span-7"
           />
-          <ScrollReveal className="col-span-12 md:col-span-4 md:col-start-9">
+          <ScrollReveal className="col-span-12 md:col-span-5 md:col-start-8 lg:col-span-4 lg:col-start-9">
             <p className="lede max-w-[34ch] text-paper/80">
               Whether you’re building something new or reimagining what already exists, we’d love to hear your idea.
             </p>
@@ -195,7 +195,7 @@ export default function ContactSection() {
               <p className="label mb-3 text-paper/60">Prefer email?</p>
               <a
                 href={`mailto:${SITE.email}`}
-                className="group relative inline-block font-display text-[clamp(20px,2vw,30px)] font-semibold tracking-tight break-all"
+                className="group relative inline-flex min-h-11 items-center break-all font-display text-[clamp(20px,2vw,30px)] font-semibold tracking-tight"
               >
                 {SITE.email}
                 <span

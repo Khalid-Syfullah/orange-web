@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import AnchorLink from "@/components/AnchorLink";
 import { NAV_LINKS, OFFICES, SITE, SOCIALS } from "@/lib/constants";
 
-const LINK = "group relative inline-flex min-h-10 items-center gap-1.5 transition-colors duration-300 hover:text-orange focus-visible:text-orange";
+const LINK = "group relative inline-flex min-h-11 min-w-11 items-center gap-1.5 transition-colors duration-300 hover:text-orange focus-visible:text-orange";
 
 function Underline() {
   return (
@@ -26,7 +26,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <nav aria-label="Footer" className="col-span-6 md:col-span-2 md:col-start-8">
+          <nav aria-label="Footer" className="col-span-6 md:col-span-3 md:col-start-7 lg:col-span-2 lg:col-start-8">
             <p className="label mb-4 text-paper/60">Navigate</p>
             <ul>
               <li>
@@ -46,7 +46,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <div className="col-span-6 md:col-span-3">
+          <div className="col-span-6 md:col-span-3 lg:col-span-3">
             <p className="label mb-4 text-paper/60">Follow</p>
             <ul>
               {SOCIALS.map((s) => (
@@ -75,7 +75,7 @@ export default function Footer() {
           © {SITE.year} {SITE.name} Studio. All rights reserved.
         </span>
         <span>{OFFICES.join(" · ")}</span>
-        <AnchorLink href="#top" className="group relative inline-flex min-h-10 items-center transition-colors duration-300 hover:text-orange">
+        <AnchorLink href="#top" className="group relative inline-flex min-h-11 items-center transition-colors duration-300 hover:text-orange">
           Back to top
           <Underline />
         </AnchorLink>

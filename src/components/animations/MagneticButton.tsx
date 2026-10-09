@@ -69,7 +69,7 @@ export default function MagneticButton({
         aria-hidden="true"
         className={`absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-expo group-hover:scale-y-100 group-focus-visible:scale-y-100 ${v.fill}`}
       />
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10 whitespace-nowrap">{children}</span>
       {loading ? (
         <LoaderCircle aria-hidden="true" className="relative z-10 size-5 animate-spin" />
       ) : (

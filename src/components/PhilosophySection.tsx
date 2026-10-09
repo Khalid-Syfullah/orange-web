@@ -82,7 +82,7 @@ export default function PhilosophySection() {
           text={"Less noise.\nMore impact."}
           highlight={["impact"]}
           highlightClassName="text-orange"
-          lineClasses={["", "md:ml-[12vw]"]}
+          lineClasses={["md:ml-[12vw]", ""]}
           className="mt-10 font-display text-[clamp(32px,9vw,168px)] font-bold leading-[0.9] tracking-[-0.055em] md:mt-16"
         />
 
