@@ -74,59 +74,26 @@ export const SERVICES = [
   },
 ] as const;
 
-export const PRINCIPLES = [
-  {
-    number: "01",
-    title: "Restraint",
-    body: "Every element earns its place. What we remove matters as much as what we ship.",
-  },
-  {
-    number: "02",
-    title: "Precision",
-    body: "Craft lives in the details nobody can name — a margin, an easing curve, ten milliseconds of latency.",
-  },
-  {
-    number: "03",
-    title: "Velocity",
-    body: "Small senior teams, short loops and working software every single week.",
-  },
-  {
-    number: "04",
-    title: "Curiosity",
-    body: "We prototype the strange idea first. Taste is trained by experiments, not by templates.",
-  },
-] as const;
-
-export const MARQUEE = ["Restraint", "Precision", "Velocity", "Curiosity", "Craft"] as const;
-
 export const PROCESS = [
   {
     number: "01",
-    title: "Listen",
-    time: "Weeks 1–2",
-    body: "We immerse ourselves in your market, your users and your constraints. You get a sharp problem statement, not a slide deck.",
-    outputs: ["Research synthesis", "Opportunity map", "Success metrics"],
+    title: "Discover",
+    body: "Understand the problem, audience, and opportunity.",
   },
   {
     number: "02",
-    title: "Define",
-    time: "Weeks 3–4",
-    body: "Direction becomes tangible: architecture, visual language and an interactive prototype you can put in front of real people.",
-    outputs: ["Concept & prototype", "Technical architecture", "Delivery plan"],
+    title: "Design",
+    body: "Translate ideas into intuitive, purposeful experiences.",
   },
   {
     number: "03",
-    title: "Build",
-    time: "Weeks 5–12",
-    body: "Design and engineering work as one team. Production code ships weekly, behind review, with performance budgets enforced.",
-    outputs: ["Weekly releases", "Design system", "Production platform"],
+    title: "Engineer",
+    body: "Build robust, scalable, and maintainable solutions.",
   },
   {
     number: "04",
     title: "Evolve",
-    time: "Ongoing",
-    body: "Launch is the first data point. We measure, refine and extend — so the work keeps compounding long after day one.",
-    outputs: ["Analytics & testing", "Roadmap support", "Team enablement"],
+    body: "Measure, improve, and continuously innovate.",
   },
 ] as const;
 

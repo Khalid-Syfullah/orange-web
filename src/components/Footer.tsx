@@ -1,6 +1,6 @@
 import AnchorLink from "@/components/AnchorLink";
 import MagneticButton from "@/components/animations/MagneticButton";
-import { CHAPTERS, OFFICES, SITE } from "@/lib/constants";
+import { NAV_LINKS, OFFICES, SITE } from "@/lib/constants";
 
 export default function Footer() {
   return (
@@ -14,7 +14,7 @@ export default function Footer() {
         <nav aria-label="Footer" className="col-span-6 md:col-span-2 md:col-start-8">
           <p className="label mb-4 text-paper/60">Index</p>
           <ul className="space-y-1">
-            {CHAPTERS.slice(1).map((c) => (
+            {NAV_LINKS.map((c) => (
               <li key={c.id}>
                 <AnchorLink href={`#${c.id}`} className="inline-flex min-h-9 items-center hover:text-orange">
                   {c.label}
