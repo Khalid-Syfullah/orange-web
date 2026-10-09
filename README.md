@@ -168,7 +168,7 @@ src/
 | # | Section | Id | What it does |
 | --- | --- | --- | --- |
 | — | **Loader** | — | Counter + progress line while fonts and assets settle, then a curtain lift hands off to the hero |
-| — | **Hero** | `top` | "Orange makes ideas happen." at up to 280px; orange disc with measurement rings follows the mouse; scroll cue |
+| — | **Hero** | `top` | "Ideas, engineered." at up to 280px; orange disc with measurement rings follows the mouse; scroll cue |
 | 01 | **The Idea** | `studio` | Manifesto: "Good ideas deserve great execution." with a scrubbed description and a closing statement |
 | 02 | **What We Do** | `capabilities` | "Everything digital. Nothing ordinary." with five expandable services |
 | — | **Built to stand out.** | `built` | Pinned stage; the 3D sphere enters from the right, swells, then sinks as the page turns dark |
