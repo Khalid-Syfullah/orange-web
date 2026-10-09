@@ -2,14 +2,19 @@
 
 import { useSyncExternalStore } from "react";
 
-export function useMediaQuery(query: string): boolean {
+/** Live result of a CSS media query. `serverValue` is used for SSR and the first hydration pass. */
+export function useMediaQuery(query: string, serverValue = false): boolean {
   return useSyncExternalStore(
-    (notify) => {
+    (onChange) => {
       const mql = window.matchMedia(query);
-      mql.addEventListener("change", notify);
-      return () => mql.removeEventListener("change", notify);
+      mql.addEventListener("change", onChange);
+      return () => mql.removeEventListener("change", onChange);
     },
     () => window.matchMedia(query).matches,
-    () => false,
+    () => serverValue,
   );
 }
+
+export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+export const useReducedMotion = () => useMediaQuery(REDUCED_MOTION_QUERY);

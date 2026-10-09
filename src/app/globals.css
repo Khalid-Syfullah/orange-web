@@ -1,43 +1,50 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-orange: #ff6b00;
-  --color-orange-soft: #ff8c32;
-  /* Large-text accent on paper (3.4:1) */
-  --color-orange-deep: #e05a00;
-  /* Small-text accent on paper (4.9:1) */
-  --color-orange-ink: #b84700;
-  --color-paper: #f7f5f0;
-  --color-ink: #171717;
-  --color-text: #202020;
-  /* #777 fails AA on paper; this is the nearest passing grey (5.1:1) */
-  --color-muted: #686663;
-  --color-rule: rgb(23 23 23 / 0.18);
+@theme {
+  --color-orange: #ff7800;
+  --color-cream: #f7f3ea;
+  --color-ink: #181818;
+  --color-leaf: #476b35;
 
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --spacing-gutter: var(--gutter);
 }
 
 :root {
-  --focus: var(--color-orange-ink);
+  --gutter: 1.25rem;
+  /* Text colour over the stage; flips with the backdrop (set from the story store). */
+  --stage-ink: var(--color-ink);
+  --stage-paper: var(--color-cream);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+:root[data-ink="light"] {
+  --stage-ink: var(--color-cream);
+  --stage-paper: var(--color-ink);
 }
 
 html {
-  background: var(--color-paper);
-  -webkit-text-size-adjust: 100%;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-text);
+  background: var(--color-cream);
   font-family: var(--font-sans);
-  font-size: clamp(16px, 0.9rem + 0.3vw, 19px);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 ::selection {
@@ -45,134 +52,66 @@ body {
   color: var(--color-ink);
 }
 
-/* Section tones drive focus colour */
-[data-tone="dark"] {
-  --focus: var(--color-orange);
-}
-[data-tone="orange"] {
-  --focus: var(--color-ink);
-}
-
-:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 4px;
-}
-/* Form fields signal focus with an animated underline instead of the outline */
-.field-input:focus-visible {
-  outline: none;
-}
-[tabindex="-1"]:focus {
-  outline: none;
-}
-
-/* Lenis */
+/* Lenis (smooth scroll) */
 html.lenis,
 html.lenis body {
   height: auto;
 }
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
 }
-.lenis.lenis-stopped {
-  overflow: hidden;
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
-
-@utility container-x {
-  padding-inline: clamp(16px, 4vw, 64px);
-}
-
-/* Editorial type helpers (display headings are set inline per section) */
-@utility label {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-@utility lede {
-  font-size: clamp(18px, 1.1rem + 0.35vw, 22px);
-  line-height: 1.5;
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
-/* Hero disc: slow rotation of the tick ring */
-@keyframes orbit {
-  to {
-    transform: rotate(360deg);
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .link {
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+    transition: background-size 0.5s var(--ease-out);
+  }
+  .link:hover,
+  .link:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .skip-link {
+    position: fixed;
+    left: var(--gutter);
+    top: 0.75rem;
+    z-index: 100;
+    transform: translateY(-200%);
+    background: var(--color-ink);
+    color: var(--color-cream);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  .skip-link:focus {
+    transform: none;
   }
 }
 
-/* Without JS the mobile overlay can't open, so show the chapter links inline instead. */
-html:not(.js) .nav-primary {
-  display: block;
-  grid-column: 1 / -1;
-  justify-self: start;
-}
-html:not(.js) .menu-toggle {
-  display: none;
-}
-
-/* Loading curtain: only exists with JS, and only until the sequence completes */
-.loader {
-  display: none;
-}
-.js .loader {
-  display: flex;
-}
-html[data-loader="done"] .loader {
-  display: none;
-}
-/* Header waits for the page to be ready, then fades in */
-.js:not([data-ready]) [data-site-header] {
-  opacity: 0;
-}
-
-/* Hero starting state — only when motion is allowed; GSAP animates it in. */
-@media (prefers-reduced-motion: no-preference) {
-  .js [data-hero="line"] {
-    transform: translateY(110%);
-  }
-  .js [data-hero="fade"] {
-    opacity: 0;
-  }
-}
-/* Scroll-revealed manifesto elements — GSAP ScrollTrigger animates them in. */
-@media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal="line"] {
-    transform: translateY(110%);
-  }
-  .js [data-reveal="fade"] {
-    opacity: 0;
-  }
-  .js [data-reveal="rule"] {
-    transform: scaleX(0);
-  }
-}
-@keyframes scroll-line {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  50% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  50.01% {
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-  }
+:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }

@@ -1,62 +1,43 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
-import Cursor from "@/components/Cursor";
-import Loader from "@/components/Loader";
-import SmoothScroll from "@/components/SmoothScroll";
-import { SITE } from "@/lib/constants";
+import { Inter, Instrument_Serif } from "next/font/google";
+import SmoothScroll from "@/scroll/SmoothScroll";
 import "./globals.css";
 
-const display = Space_Grotesk({
+const display = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-const sans = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
   display: "swap",
 });
 
-/*
- * Runs before first paint. Marks JS availability and decides whether the loading sequence plays:
- * it is skipped for reduced motion and for repeat visits in the same session. A timeout makes sure
- * the page can never stay hidden if something goes wrong.
- */
-const HEAD_SCRIPT = `(function(d){var h=d.documentElement;h.classList.add('js');try{if(sessionStorage.getItem('orange-loaded')||matchMedia('(prefers-reduced-motion: reduce)').matches){h.dataset.ready='1';h.dataset.loader='done'}}catch(e){}setTimeout(function(){h.dataset.ready='1';h.dataset.loader='done'},9000)})(document)`;
+const sans = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: `${SITE.name} — ${SITE.tagline}`, template: `%s · ${SITE.name}` },
-  description: SITE.description,
+  title: "Orange.io — From seed to slice",
+  description:
+    "A scroll-driven story in eight movements: two people tend a young orange tree, it grows and ripens, and one orange is picked, turned in the light and opened.",
+  applicationName: "Orange.io",
   openGraph: {
-    title: `${SITE.name} — ${SITE.tagline}`,
-    description: SITE.secondary,
+    title: "Orange.io — From seed to slice",
+    description: "A scroll-driven story in eight movements.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: "#F7F5F0",
+  themeColor: "#F7F3EA",
+  colorScheme: "light",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${display.variable} ${sans.variable}`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: HEAD_SCRIPT }} />
-      </head>
+    <html lang="en" data-ink="dark" className={`${display.variable} ${sans.variable}`}>
       <body>
-        <a
-          href="#main"
-          className="label fixed left-4 top-4 z-[100] -translate-y-24 bg-ink px-4 py-3 text-paper focus:translate-y-0"
-        >
+        <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <SmoothScroll />
-        <Loader />
-        <Cursor />
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
