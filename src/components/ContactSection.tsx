@@ -31,7 +31,7 @@ export default function ContactSection() {
       className="bg-orange pb-20 pt-28 text-ink md:pb-32 md:pt-44"
     >
       <div className="container-x">
-        <p className="label">(06) Contact</p>
+        <p className="label">Chapter 04 — Let’s Talk</p>
         <TextReveal
           as="h2"
           id="contact-title"

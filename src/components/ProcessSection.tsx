@@ -40,7 +40,7 @@ export default function ProcessSection() {
       <div className="container-x grid grid-cols-12 gap-x-4 gap-y-16 md:gap-x-6">
         <div className="col-span-12 md:col-span-5">
           <div className="md:sticky md:top-32">
-            <p className="label text-orange-ink">(05) Process</p>
+            <p className="label text-orange-ink">The Process</p>
             <TextReveal
               as="h2"
               id="process-title"

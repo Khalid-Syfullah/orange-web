@@ -13,7 +13,7 @@ export default function PhilosophySection() {
       <div className="container-x grid grid-cols-12 gap-x-4 md:gap-x-6">
         <div className="col-span-12 md:col-span-5">
           <div className="md:sticky md:top-32">
-            <p className="label text-orange">(04) Philosophy</p>
+            <p className="label text-orange">Chapter 03 — How We Think</p>
             <TextReveal
               as="h2"
               id="philosophy-title"

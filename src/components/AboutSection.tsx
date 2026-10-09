@@ -1,82 +1,176 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { animate, useInView, useReducedMotion } from "motion/react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
+import AnchorLink from "@/components/AnchorLink";
+import ParallaxSection from "@/components/animations/ParallaxSection";
 import ScrubText from "@/components/animations/ScrubText";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-import { EASE } from "@/lib/animations";
-import { STATS } from "@/lib/constants";
+import { gsap, NO_MOTION_QUERY, registerGsap } from "@/lib/animations";
 
-function CountUp({ value, suffix }: { value: number; suffix: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.8 });
-  const reduce = useReducedMotion();
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || !inView || reduce) return;
-    const controls = animate(0, value, {
-      duration: 1.8,
-      ease: EASE,
-      onUpdate: (v) => {
-        node.textContent = `${Math.round(v)}${suffix}`;
-      },
-    });
-    return () => controls.stop();
-  }, [inView, reduce, value, suffix]);
-
+/** One masked line of display type; GSAP lifts it out of its mask. */
+function Line({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <span ref={ref} className="tabular-nums">
-      {value}
-      {suffix}
+    <span aria-hidden="true" className={`block overflow-hidden pb-[0.12em] -mb-[0.12em] ${className}`}>
+      <span data-reveal="line" className="block will-change-transform">
+        {children}
+      </span>
     </span>
   );
 }
 
 export default function AboutSection() {
+  const root = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    registerGsap();
+    const el = root.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+
+    mm.add(NO_MOTION_QUERY, () => {
+      // Each group plays once, the first time it reaches 80% of the viewport.
+      el.querySelectorAll<HTMLElement>("[data-group]").forEach((group) => {
+        const tl = gsap.timeline({
+          defaults: { ease: "expo.out" },
+          scrollTrigger: { trigger: group, start: "top 80%", once: true },
+        });
+        tl.fromTo(group.querySelectorAll("[data-reveal=rule]"), { scaleX: 0 }, { scaleX: 1, duration: 1.6 })
+          .fromTo(
+            group.querySelectorAll("[data-reveal=line]"),
+            { y: 0, yPercent: 110 },
+            { y: 0, yPercent: 0, duration: 1.4, stagger: 0.14 },
+            "-=1.3",
+          )
+          .fromTo(
+            group.querySelectorAll("[data-reveal=fade]"),
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 1, stagger: 0.1 },
+            "-=1.1",
+          );
+      });
+
+      // The closing rule is scrubbed: it draws as the reader approaches the next chapter.
+      const closing = el.querySelector<HTMLElement>("[data-closing]");
+      const rule = el.querySelector<HTMLElement>("[data-closing-rule]");
+      if (closing && rule) {
+        gsap.fromTo(
+          rule,
+          { scaleX: 0 },
+          { scaleX: 1, ease: "none", scrollTrigger: { trigger: closing, start: "top 95%", end: "top 45%", scrub: true } },
+        );
+      }
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
-    <section id="studio" data-tone="light" aria-labelledby="studio-label" className="relative py-28 md:py-44">
-      <div className="container-x grid grid-cols-12 gap-x-4 gap-y-12 md:gap-x-6">
-        <p id="studio-label" className="label col-span-12 text-orange-ink md:col-span-2">
-          (02) Studio
-        </p>
+    <section
+      ref={root}
+      id="studio"
+      data-tone="light"
+      aria-labelledby="studio-title"
+      className="relative overflow-hidden pb-20 pt-28 md:pb-32 md:pt-44"
+    >
+      {/* Oversized outlined numeral — slow parallax counterweight */}
+      <div aria-hidden="true" className="pointer-events-none absolute -right-[2vw] top-[26%] md:top-[22%] select-none">
+        <ParallaxSection speed={0.22}>
+          <span
+            className="block font-display text-[clamp(220px,46vw,760px)] font-bold leading-[0.8] tracking-[-0.07em] text-transparent"
+            style={{ WebkitTextStroke: "1px var(--color-orange)" }}
+          >
+            01
+          </span>
+        </ParallaxSection>
+      </div>
 
-        <div className="col-span-12 md:col-span-10">
-          <ScrubText
-            className="display-md !text-[clamp(30px,5.2vw,84px)] !leading-[1.02] text-ink"
-            text="Orange is an independent studio of designers, engineers and strategists. We make the products, platforms and brand experiences that ambitious companies are measured by — built with the precision of software and the taste of print."
-          />
+      <div className="container-x relative">
+        {/* Chapter heading */}
+        <div data-group>
+          <div data-reveal="rule" className="h-px origin-left bg-ink/30" />
+          <div className="label flex items-center justify-between py-4">
+            <p data-reveal="fade">Chapter 01</p>
+            <p data-reveal="fade" className="flex items-center gap-3">
+              <span aria-hidden="true" className="size-2 bg-orange" />
+              The Idea
+            </p>
+          </div>
+
+          <h2
+            id="studio-title"
+            aria-label="Good ideas deserve great execution."
+            className="mt-10 font-display text-[clamp(32px,9vw,168px)] font-bold leading-[0.9] tracking-[-0.055em] text-ink md:mt-16"
+          >
+            <Line>Good ideas deserve</Line>
+            <Line className="md:ml-[12vw]">
+              great <span className="text-orange-deep">execution.</span>
+            </Line>
+          </h2>
         </div>
 
-        <div className="col-span-12 grid grid-cols-12 gap-x-4 gap-y-8 md:col-span-10 md:col-start-3 md:mt-12 md:gap-x-6">
-          <ScrollReveal className="col-span-12 lg:col-span-6">
-            <p className="lede max-w-[44ch]">
-              We are deliberately small. Every engagement is led by senior people from the first workshop
-              to the final commit — no hand-offs, no layers, no theatre.
+        {/* Description, pushed into the right of the grid */}
+        <div className="mt-20 grid grid-cols-12 gap-x-4 gap-y-8 md:mt-36 md:gap-x-6">
+          <div data-group className="col-span-12 md:col-span-3">
+            <div data-reveal="rule" className="mb-4 h-px w-12 origin-left bg-orange-deep" />
+            <p data-reveal="fade" className="label text-muted">
+              About Orange
             </p>
-          </ScrollReveal>
-          <ScrollReveal className="col-span-12 lg:col-span-6" delay={0.1}>
-            <p className="max-w-[44ch] text-muted">
-              Since 2014 we have partnered with founders, scale-ups and global institutions across Europe,
-              Asia and the Americas — shipping work that is quick to load, a pleasure to use and difficult to forget.
-            </p>
-          </ScrollReveal>
+          </div>
+          <div className="col-span-12 md:col-span-8 md:col-start-5 lg:col-span-7">
+            <ScrubText
+              className="font-display text-[clamp(22px,2.7vw,42px)] font-medium leading-[1.22] tracking-[-0.025em] text-ink"
+              text="Orange is a creative technology studio building digital experiences that combine thoughtful design, powerful engineering, and meaningful innovation."
+            />
+          </div>
         </div>
 
-        <dl className="col-span-12 mt-8 grid grid-cols-2 border-t border-rule md:mt-16 lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <ScrollReveal
-              key={s.label}
-              delay={i * 0.08}
-              className="border-b border-rule py-8 pr-4 lg:border-b-0 lg:border-r lg:pl-6 lg:first:pl-0 lg:last:border-r-0"
+        {/* Secondary statement */}
+        <ParallaxSection speed={0.04} className="mt-28 md:mt-52">
+          <div data-group>
+            <div data-reveal="rule" className="h-px origin-left bg-ink/30" />
+            <div className="label flex items-center justify-between py-4 text-muted">
+              <p data-reveal="fade">A belief</p>
+              <p data-reveal="fade" aria-hidden="true" className="text-orange-ink">
+                —
+              </p>
+            </div>
+            <p
+              aria-label="We don’t just build software. We build possibilities."
+              className="mt-8 font-display text-[clamp(30px,5.6vw,100px)] font-bold leading-[0.95] tracking-[-0.045em] text-ink md:mt-12"
             >
-              <dd className="display-lg text-ink">
-                <CountUp value={s.value} suffix={s.suffix} />
-              </dd>
-              <dt className="label mt-3 text-muted">{s.label}</dt>
-            </ScrollReveal>
-          ))}
-        </dl>
+              <Line>We don’t just build software.</Line>
+              <Line className="md:ml-[10vw]">
+                We build <span className="text-orange-deep">possibilities.</span>
+              </Line>
+            </p>
+          </div>
+        </ParallaxSection>
+
+        {/* Hand-off to the next chapter */}
+        <div data-closing className="mt-24 md:mt-44">
+          <div data-closing-rule className="h-0.5 origin-left bg-orange-deep" />
+          <AnchorLink
+            href="#capabilities"
+            className="group flex items-end justify-between gap-6 py-6 md:py-8"
+            aria-label="Next chapter: 02, What We Do"
+          >
+            <span className="label text-muted">Next chapter</span>
+            <span className="flex items-center gap-3 font-display text-[clamp(24px,3.6vw,56px)] font-semibold tracking-[-0.03em] text-ink">
+              <span className="tabular-nums text-orange-ink">02</span>
+              <span className="relative">
+                What We Do
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-current transition-transform duration-500 ease-expo group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                />
+              </span>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="size-[0.8em] transition-transform duration-500 ease-expo group-hover:-translate-y-1 group-hover:translate-x-1"
+              />
+            </span>
+          </AnchorLink>
+        </div>
       </div>
     </section>
   );

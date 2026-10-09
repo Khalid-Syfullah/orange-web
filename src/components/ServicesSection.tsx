@@ -9,15 +9,15 @@ export default function ServicesSection() {
     <section id="capabilities" data-tone="light" aria-labelledby="capabilities-title" className="pb-28 md:pb-44">
       <div className="container-x">
         <div className="grid grid-cols-12 gap-x-4 gap-y-8 pb-14 md:gap-x-6 md:pb-24">
-          <p className="label col-span-12 text-orange-ink md:col-span-2">(03) Capabilities</p>
+          <p className="label col-span-12 text-orange-ink md:col-span-3">Chapter 02 — What We Do</p>
           <TextReveal
             as="h2"
             id="capabilities-title"
             text={"Capabilities,\nengineered."}
             highlight={["engineered"]}
-            className="display-xl col-span-12 text-ink md:col-span-10"
+            className="display-xl col-span-12 text-ink md:col-span-9"
           />
-          <p className="lede col-span-12 max-w-[40ch] text-muted md:col-span-5 md:col-start-3">
+          <p className="lede col-span-12 max-w-[40ch] text-muted md:col-span-5 md:col-start-4">
             Five disciplines, one team. Each is practised at depth and combined without friction.
           </p>
         </div>

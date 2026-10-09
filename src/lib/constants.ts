@@ -34,13 +34,6 @@ export const NAV_LINKS = [
   { id: "contact", number: "04", label: "Let\u2019s Talk" },
 ] as const;
 
-export const STATS = [
-  { value: 11, suffix: "", label: "Years of practice" },
-  { value: 160, suffix: "+", label: "Products shipped" },
-  { value: 14, suffix: "", label: "Countries served" },
-  { value: 32, suffix: "", label: "Senior makers, no juniors" },
-] as const;
-
 export const SERVICES = [
   {
     number: "01",

@@ -167,6 +167,18 @@ html:not(.js) .menu-toggle {
     opacity: 0;
   }
 }
+/* Scroll-revealed manifesto elements — GSAP ScrollTrigger animates them in. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal="line"] {
+    transform: translateY(110%);
+  }
+  .js [data-reveal="fade"] {
+    opacity: 0;
+  }
+  .js [data-reveal="rule"] {
+    transform: scaleX(0);
+  }
+}
 @keyframes scroll-line {
   0% {
     transform: scaleY(0);
